@@ -1,11 +1,13 @@
 const request = require('request');
 const fs = require('fs');
+require('dotenv').config()
 
 const githubRequest = function(endpoint, callback) {
   var requestData = {
     url: `https://api.github.com${endpoint}`,
     auth: {
-    bearer: '05eec1aea8e13f3adaa10753783eeae25fe5ed54'    },
+    bearer: process.env.DB_BEARER
+     },
     headers: {
       'User-Agent': "request"
     }
@@ -25,7 +27,7 @@ function downloadImageByURL(url, path) {
 function getRepoContributors(repoOwner, repoName) {
   githubRequest(`/repos/${repoOwner}/${repoName}/contributors`, (err, response, body) => {
     if (err) {
-      console.log("error in getRepoContributors", error);
+      console.log("error in getRepoContributors", err);
       return;
     } else {
     var contributors = JSON.parse(body);
