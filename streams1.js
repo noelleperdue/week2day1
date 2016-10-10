@@ -5,12 +5,17 @@ var requestOptions = {
   path: "/"
 };
 
-http.get(requestOptions, (response) => {    // HTTP Response Callback
+function printHTML(data) {
+  console.log(data);
+}
+
+function readHTML(site, callback) {
+http.get(site, (response) => {    // HTTP Response Callback
 
   response.setEncoding("utf8");             // Use UTF-8 encoding
 
   response.on("data", function(data) {           // On Data Received
-    console.log(data);
+    printHTML(data);
   });
 
   response.on("end", function() {                // On Data Completed
@@ -18,3 +23,6 @@ http.get(requestOptions, (response) => {    // HTTP Response Callback
   });
 
 });
+};
+
+console.log(readHTML(requestOptions));
