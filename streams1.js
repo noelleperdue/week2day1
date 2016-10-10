@@ -14,9 +14,7 @@ http.get(site, (response) => {    // HTTP Response Callback
 
   response.setEncoding("utf8");             // Use UTF-8 encoding
 
-  response.on("data", function(data) {           // On Data Received
-    printHTML(data);
-  });
+  response.on("data", callback)
 
   response.on("end", function() {                // On Data Completed
     console.log("Response stream complete.");
@@ -25,4 +23,4 @@ http.get(site, (response) => {    // HTTP Response Callback
 });
 };
 
-console.log(readHTML(requestOptions));
+readHTML(requestOptions, printHTML);
