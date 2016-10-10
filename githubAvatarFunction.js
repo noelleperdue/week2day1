@@ -26,12 +26,15 @@ function downloadImageByURL(url, path) {
 
 function getRepoContributors(repoOwner, repoName) {
   githubRequest(`/repos/${repoOwner}/${repoName}/contributors`, (err, response, body) => {
-    if (err) {
-      console.log("error in getRepoContributors", err);
-      return;
-    } else {
     var contributors = JSON.parse(body);
 
+    if (contributors.message === "Bad credentials") {
+      throw new Error("You arent authorized to see this- check your token")
+    }
+
+    else if (contributors.message === "Not Found") {
+      throw new Error("Repository or user not found- check your spelling");
+    } else {
     contributors.forEach(function(contributor) {
       downloadImageByURL(contributor.avatar_url, contributor.login)
       console.log("path: ", contributor.login)
@@ -39,6 +42,12 @@ function getRepoContributors(repoOwner, repoName) {
   };
   })
 };
+
+if (process.argv.length !== 4) {
+  throw new Error("Only enter the repo owner and name, please");
+} else if (!process.env.DB_BEARER) {
+  throw new Error("No .env file found")
+}
 
 
   getRepoContributors(process.argv[2], process.argv[3], console.log);
